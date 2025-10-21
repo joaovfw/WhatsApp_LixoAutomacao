@@ -1,0 +1,64 @@
+# 🤖 Bot de Rodízio do Lixo (WhatsApp Automation)
+
+Este é um projeto de automação desenvolvido em Python (Flask) para gerenciar o rodízio de tarefas domésticas ou de escritório, especificamente a tarefa de "levar o lixo". O bot é ativado por comandos via WhatsApp e mantém um registro de quem é o próximo na fila, garantindo que o revezamento seja justo e automático.
+
+---
+
+## 💡 Habilidades e Tecnologias Demonstradas
+
+Este projeto destaca proficiência nas seguintes áreas:
+
+* **Desenvolvimento Backend:** Python e framework **Flask** para criar um servidor web leve e eficiente.
+* **Integração de API:** Uso da **API Whapi.cloud** para enviar e receber mensagens do WhatsApp através de Webhooks.
+* **Controle de Estado:** Implementação de persistência de dados utilizando o arquivo **`data.json`** para salvar o estado atual do rodízio, garantindo que as informações não se percam ao reiniciar o servidor.
+* **Ambiente de Desenvolvimento:** Configuração e gerenciamento de ambientes virtuais (**`venv`**) e exposição de serviços locais para a internet (**Ngrok**).
+* **Segurança:** Uso de variáveis de ambiente (**`.env`**) para proteger tokens de API e credenciais sensíveis.
+* **Lógica de Negócio:** Implementação de lógica de rodízio circular (`%` operador módulo) e restrição de uso a um **grupo de WhatsApp específico** (`TARGET_GROUP_ID`).
+
+---
+
+## ⚙️ Como Funciona
+
+O fluxo da automação é o seguinte:
+
+1.  Um usuário (em um grupo restrito) envia o comando `LEVEI` ou `LIXO`.
+2.  O **Whapi.cloud** envia o evento de mensagem como um Webhook POST para a URL pública do **Ngrok**.
+3.  O **Ngrok** encaminha o Webhook para o servidor **Flask** (`app.py`) rodando localmente.
+4.  O `app.py` verifica o `chat_id`. Se for o grupo correto, ele processa o comando.
+    * **Comando `LIXO`:** Lê `data.json` e informa quem é o próximo.
+    * **Comando `LEVEI`:** Atualiza o índice no `data.json` e envia uma mensagem de confirmação, já indicando o próximo da fila.
+5.  O servidor Flask usa a **API Whapi.cloud** novamente para enviar a mensagem de resposta de volta ao grupo.
+
+---
+
+## 🛠️ Configuração e Instalação
+
+Para replicar este projeto, siga os seguintes passos:
+
+1.  **Clone o Repositório:**
+    ```bash
+    git clone [SEU_LINK_DO_REPOSITORIO]
+    cd nome_do_projeto
+    ```
+2.  **Crie e Ative o Ambiente Virtual:**
+    ```bash
+    python -m venv venv
+    source venv/bin/activate # ou venv\Scripts\activate no Windows
+    ```
+3.  **Instale as Dependências:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+4.  **Crie o Arquivo `.env`:** Crie um arquivo chamado `.env` e preencha com suas credenciais e configurações (substitua os placeholders):
+
+    ```ini
+    # .env
+    WHAPI_TOKEN="SEU_TOKEN_DO_WHAPI"
+    WHAPI_URL_BASE="[https://gate.whapi.cloud/v1](https://gate.whapi.cloud/v1)" 
+    PORT=5000 
+    PARTICIPANTS="Nome1,Nome2,Nome3" 
+    TARGET_GROUP_ID="ID_DO_GRUPO_EXCLUSIVO@g.us"
+    ```
+5.  **Inicialize o Estado:** Certifique-se de que o `data.json` contém: `{"last_person_index": -1}`.
+
+---
