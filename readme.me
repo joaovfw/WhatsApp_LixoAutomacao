@@ -21,12 +21,12 @@ Este projeto destaca proficiência nas seguintes áreas:
 
 O fluxo da automação é o seguinte:
 
-1.  Um usuário (em um grupo restrito) envia o comando `LEVEI` ou `LIXO`.
+1.  Um usuário (em um grupo restrito) envia o comando `#LEVEI` ou `#LIXO`.
 2.  O **Whapi.cloud** envia o evento de mensagem como um Webhook POST para a URL pública do **Ngrok**.
 3.  O **Ngrok** encaminha o Webhook para o servidor **Flask** (`app.py`) rodando localmente.
 4.  O `app.py` verifica o `chat_id`. Se for o grupo correto, ele processa o comando.
-    * **Comando `LIXO`:** Lê `data.json` e informa quem é o próximo.
-    * **Comando `LEVEI`:** Atualiza o índice no `data.json` e envia uma mensagem de confirmação, já indicando o próximo da fila.
+    * **Comando `#LIXO`:** Lê `data.json` e informa quem é o próximo.
+    * **Comando `#LEVEI`:** Atualiza o índice no `data.json` e envia uma mensagem de confirmação, já indicando o próximo da fila.
 5.  O servidor Flask usa a **API Whapi.cloud** novamente para enviar a mensagem de resposta de volta ao grupo.
 
 ---
